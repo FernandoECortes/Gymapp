@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gym Routine Tracker</title>
+    <title>Gym Routine Pro Tracker</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -13,8 +13,10 @@
             --primary: #3b82f6;
             --primary-hover: #2563eb;
             --accent: #10b981;
+            --accent-hover: #059669;
             --danger: #ef4444;
             --danger-hover: #dc2626;
+            --warning: #f59e0b;
             --border: #334155;
         }
 
@@ -33,11 +35,12 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            padding-bottom: 90px; /* Espacio para el timer flotante */
         }
 
         .container {
             width: 100%;
-            max-width: 700px;
+            max-width: 750px;
         }
 
         header {
@@ -64,31 +67,19 @@
             font-weight: 600;
             transition: background 0.2s;
         }
+        .btn:hover { background-color: var(--primary-hover); }
 
-        .btn:hover {
-            background-color: var(--primary-hover);
-        }
+        .btn-success { background-color: var(--accent); }
+        .btn-success:hover { background-color: var(--accent-hover); }
 
-        .btn-success {
-            background-color: var(--accent);
-        }
-        .btn-success:hover {
-            background-color: #059669;
-        }
+        .btn-danger { background-color: var(--danger); }
+        .btn-danger:hover { background-color: var(--danger-hover); }
 
-        .btn-danger {
-            background-color: var(--danger);
-        }
-        .btn-danger:hover {
-            background-color: var(--danger-hover);
-        }
+        .btn-warning { background-color: var(--warning); color: #000; }
+        .btn-warning:hover { background-color: #d97706; }
 
-        .btn-sm {
-            padding: 6px 10px;
-            font-size: 0.85rem;
-        }
+        .btn-sm { padding: 6px 10px; font-size: 0.85rem; }
 
-        /* Formularios y modales */
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
@@ -98,17 +89,8 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.9rem; }
         input, select {
             width: 100%;
             padding: 10px;
@@ -118,19 +100,17 @@
             color: var(--text-color);
             font-size: 1rem;
         }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
+        input:focus, select:focus { outline: none; border-color: var(--primary); }
 
         .form-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
-        /* Listado de Rutinas */
+        /* Rutinas y Ejercicios */
         .routine-item {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
@@ -138,26 +118,14 @@
             padding: 18px;
             margin-bottom: 15px;
         }
-
         .routine-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
         }
-
-        .routine-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-
-        .exercise-list {
-            list-style: none;
-            border-top: 1px solid var(--border);
-            padding-top: 10px;
-        }
-
+        .routine-title { font-size: 1.2rem; font-weight: bold; }
+        .exercise-list { list-style: none; border-top: 1px solid var(--border); padding-top: 10px; }
         .exercise-row {
             display: flex;
             justify-content: space-between;
@@ -166,38 +134,50 @@
             border-bottom: 1px dashed var(--border);
             font-size: 0.95rem;
         }
-
-        .exercise-row:last-child {
-            border-bottom: none;
-        }
-
-        .exercise-details {
+        .badge {
+            background-color: #334155;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            font-size: 0.85rem;
+            margin-left: 8px;
         }
 
-        .actions {
+        /* Panel de Cronómetro Flotante */
+        .timer-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #0f172a;
+            border-top: 2px solid var(--border);
+            padding: 12px 20px;
             display: flex;
-            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
         }
+        .timer-display { font-size: 1.3rem; font-weight: bold; font-family: monospace; color: var(--accent); }
 
-        .hidden {
-            display: none !important;
-        }
+        /* Modo entrenamiento activo */
+        .active-workout-card { border: 2px solid var(--accent); }
+        .set-checkbox { width: 22px; height: 22px; accent-color: var(--accent); cursor: pointer; }
 
-        .empty-state {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 40px 0;
-        }
+        .hidden { display: none !important; }
+        .empty-state { text-align: center; color: var(--text-muted); padding: 40px 0; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1>💪 Mis Rutinas</h1>
-            <button class="btn" id="toggle-form-btn">+ Nueva Rutina</button>
+            <h1>💪 Gym Routine Pro</h1>
+            <div>
+                <button class="btn btn-warning btn-sm" id="history-view-btn" onclick="toggleHistoryView()">Historial</button>
+                <button class="btn" id="toggle-form-btn">+ Nueva Rutina</button>
+            </div>
         </header>
 
         <!-- Formulario para crear/editar rutina -->
@@ -212,7 +192,6 @@
 
                 <div id="exercises-container">
                     <label>Ejercicios</label>
-                    <!-- Dinámicos -->
                 </div>
 
                 <button type="button" class="btn btn-sm btn-success" id="add-exercise-btn" style="margin-bottom: 15px;">+ Agregar Ejercicio</button>
@@ -224,15 +203,36 @@
             </form>
         </div>
 
-        <!-- Contenedor donde se cargan las rutinas -->
-        <div id="routines-list">
-            <!-- Las rutinas se cargan aquí -->
+        <!-- Vista de Historial -->
+        <div class="card hidden" id="history-card">
+            <h3 style="margin-bottom: 15px;">📈 Historial de Entrenamientos</h3>
+            <div id="history-list"></div>
+            <button class="btn btn-sm btn-danger" onclick="toggleHistoryView()" style="margin-top: 15px;">Cerrar Historial</button>
+        </div>
+
+        <!-- Listado de Rutinas / Modo Activo -->
+        <div id="main-view">
+            <div id="routines-list"></div>
         </div>
     </div>
 
+    <!-- Barra de Cronómetro Global -->
+    <div class="timer-bar">
+        <span>⏱️ Descanso:</span>
+        <span class="timer-display" id="timer-display">00:00</span>
+        <button class="btn btn-sm" onclick="startTimer(60)">60s</button>
+        <button class="btn btn-sm" onclick="startTimer(90)">90s</button>
+        <button class="btn btn-sm" onclick="startTimer(120)">120s</button>
+        <button class="btn btn-danger btn-sm" onclick="stopTimer()">Parar</button>
+    </div>
+
     <script>
-        // Estructura de datos y estado local
         let routines = JSON.parse(localStorage.getItem('gym_routines')) || [];
+        let historyLog = JSON.parse(localStorage.getItem('gym_history')) || [];
+        
+        let activeWorkout = null; // Guardará los datos de la sesión en curso
+        let timerInterval = null;
+        let timeLeft = 0;
 
         const toggleFormBtn = document.getElementById('toggle-form-btn');
         const routineFormCard = document.getElementById('routine-form-card');
@@ -244,14 +244,14 @@
         const formTitle = document.getElementById('form-title');
         const routineIdInput = document.getElementById('routine-id');
         const routineNameInput = document.getElementById('routine-name');
+        const historyCard = document.getElementById('history-card');
+        const historyList = document.getElementById('history-list');
 
-        // Event Listeners
         toggleFormBtn.addEventListener('click', () => openForm());
         cancelFormBtn.addEventListener('click', () => closeForm());
         addExerciseBtn.addEventListener('click', () => addExerciseRow());
         routineForm.addEventListener('submit', saveRoutine);
 
-        // Inicializar vista
         renderRoutines();
 
         function openForm(routine = null) {
@@ -268,7 +268,7 @@
                 formTitle.textContent = 'Crear Nueva Rutina';
                 routineIdInput.value = '';
                 routineNameInput.value = '';
-                addExerciseRow(); // Añadir al menos una línea de ejercicio vacía
+                addExerciseRow();
             }
         }
 
@@ -278,21 +278,22 @@
             routineForm.reset();
         }
 
-        function addExerciseRow(data = { name: '', sets: '', reps: '', weight: '' }) {
+        function addExerciseRow(data = { name: '', reps: '', weight: '', muscle: 'Pecho' }) {
             const row = document.createElement('div');
             row.classList.add('form-row');
-            row.style.marginBottom = '10px';
             row.innerHTML = `
-                <div style="grid-column: span 2;">
-                    <input type="text" placeholder="Nombre del ejercicio (Ej: Press Banca)" class="ex-name" value="${data.name}" required>
-                </div>
-                <div>
-                    <input type="text" placeholder="Series x Reps (Ej: 4x10)" class="ex-reps" value="${data.reps}" required>
-                </div>
-                <div style="display: flex; gap: 5px;">
-                    <input type="text" placeholder="Peso (Ej: 60 kg)" class="ex-weight" value="${data.weight}" required>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()">X</button>
-                </div>
+                <input type="text" placeholder="Ejercicio (Ej: Press Banca)" class="ex-name" value="${data.name}" required>
+                <input type="text" placeholder="Series/Reps (Ej: 4x10)" class="ex-reps" value="${data.reps}" required>
+                <input type="text" placeholder="Peso (Ej: 60 kg)" class="ex-weight" value="${data.weight}" required>
+                <select class="ex-muscle">
+                    <option value="Pecho" ${data.muscle==='Pecho'?'selected':''}>Pecho</option>
+                    <option value="Espalda" ${data.muscle==='Espalda'?'selected':''}>Espalda</option>
+                    <option value="Piernas" ${data.muscle==='Piernas'?'selected':''}>Piernas</option>
+                    <option value="Hombros" ${data.muscle==='Hombros'?'selected':''}>Hombros</option>
+                    <option value="Brazos" ${data.muscle==='Brazos'?'selected':''}>Brazos</option>
+                    <option value="Core" ${data.muscle==='Core'?'selected':''}>Core</option>
+                </select>
+                <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">X</button>
             `;
             exercisesContainer.appendChild(row);
         }
@@ -309,7 +310,8 @@
                 exercises.push({
                     name: row.querySelector('.ex-name').value,
                     reps: row.querySelector('.ex-reps').value,
-                    weight: row.querySelector('.ex-weight').value
+                    weight: row.querySelector('.ex-weight').value,
+                    muscle: row.querySelector('.ex-muscle').value
                 });
             });
 
@@ -319,13 +321,9 @@
             }
 
             const routineData = { id, name, exercises };
-
             const index = routines.findIndex(r => r.id === id);
-            if (index >= 0) {
-                routines[index] = routineData;
-            } else {
-                routines.push(routineData);
-            }
+            if (index >= 0) routines[index] = routineData;
+            else routines.push(routineData);
 
             localStorage.setItem('gym_routines', JSON.stringify(routines));
             closeForm();
@@ -333,6 +331,8 @@
         }
 
         function renderRoutines() {
+            if (activeWorkout) return; // Si estamos entrenando, no redibujar la lista estática
+
             if (routines.length === 0) {
                 routinesList.innerHTML = `<div class="empty-state">No tenés rutinas guardadas todavía. ¡Crea una para empezar!</div>`;
                 return;
@@ -347,8 +347,8 @@
                 routine.exercises.forEach(ex => {
                     exercisesHTML += `
                         <li class="exercise-row">
-                            <span><strong>${ex.name}</strong></span>
-                            <span class="exercise-details">Series/Reps: <strong>${ex.reps}</strong> | Peso: <strong>${ex.weight}</strong></span>
+                            <span><strong>${ex.name}</strong> <span class="badge">${ex.muscle}</span></span>
+                            <span style="color: var(--text-muted);">Meta: <strong>${ex.reps}</strong> | Último: <strong>${ex.weight}</strong></span>
                         </li>
                     `;
                 });
@@ -356,17 +356,154 @@
                 item.innerHTML = `
                     <div class="routine-header">
                         <span class="routine-title">${routine.name}</span>
-                        <div class="actions">
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-success btn-sm" onclick="startWorkout(${routine.id})">▶️ Entrenar</button>
                             <button class="btn btn-sm" onclick="editRoutine(${routine.id})">Editar</button>
                             <button class="btn btn-danger btn-sm" onclick="deleteRoutine(${routine.id})">Eliminar</button>
                         </div>
                     </div>
-                    <ul class="exercise-list">
-                        ${exercisesHTML}
-                    </ul>
+                    <ul class="exercise-list">${exercisesHTML}</ul>
                 `;
                 routinesList.appendChild(item);
             });
+        }
+
+        /* --- MODO ENTRENAMIENTO EN VIVO --- */
+        function startWorkout(id) {
+            const routine = routines.find(r => r.id === id);
+            if (!routine) return;
+
+            activeWorkout = {
+                routineName: routine.name,
+                date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                exercises: routine.exercises.map(ex => ({ ...ex, loggedWeight: ex.weight }))
+            };
+
+            renderActiveWorkout();
+        }
+
+        function renderActiveWorkout() {
+            toggleFormBtn.classList.add('hidden');
+            routinesList.innerHTML = `
+                <div class="card active-workout-card">
+                    <h2 style="color: var(--accent); margin-bottom: 5px;">🔥 Entrenando: ${activeWorkout.routineName}</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Marcá tus series completadas y ajustá el peso real utilizado hoy.</p>
+                    
+                    ${activeWorkout.exercises.map((ex, idx) => `
+                        <div style="background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--border);">
+                            <div style="font-weight: bold; margin-bottom: 6px;">${ex.name} <span class="badge">${ex.muscle}</span></div>
+                            <div style="display: flex; gap: 10px; align-items: center; font-size: 0.9rem; color: var(--text-muted);">
+                                <span>Meta: ${ex.reps}</span>
+                                <div style="flex-grow: 1;">
+                                    <input type="text" value="${ex.loggedWeight}" id="weight-${idx}" style="padding: 6px; font-size: 0.9rem;" placeholder="Peso real hoy">
+                                </div>
+                                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text-color);">
+                                    <input type="checkbox" class="set-checkbox"> Hecho
+                                </label>
+                            </div>
+                        </div>
+                    `).join('')}
+
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn btn-success" onclick="finishWorkout()">🏁 Finalizar y Guardar Sesión</button>
+                        <button class="btn btn-danger" onclick="cancelWorkout()">Cancelar</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function finishWorkout() {
+            // Actualizar pesos reales en la rutina base si el usuario los cambió
+            activeWorkout.exercises.forEach((ex, idx) => {
+                const newWeightInput = document.getElementById(`weight-${idx}`);
+                if (newWeightInput) {
+                    ex.loggedWeight = newWeightInput.value;
+                }
+            });
+
+            // Guardar en historial
+            historyLog.unshift(activeWorkout);
+            localStorage.setItem('gym_history', JSON.stringify(historyLog));
+
+            // Actualizar pesos en la rutina principal
+            const routine = routines.find(r => r.name === activeWorkout.routineName);
+            if (routine) {
+                routine.exercises.forEach((ex, idx) => {
+                    ex.weight = activeWorkout.exercises[idx].loggedWeight;
+                });
+                localStorage.setItem('gym_routines', JSON.stringify(routines));
+            }
+
+            activeWorkout = null;
+            toggleFormBtn.classList.remove('hidden');
+            renderRoutines();
+            alert('¡Entrenamiento guardado con éxito! 💪');
+        }
+
+        function cancelWorkout() {
+            if (confirm('¿Seguro que querés cancelar la sesión actual?')) {
+                activeWorkout = null;
+                toggleFormBtn.classList.remove('hidden');
+                renderRoutines();
+            }
+        }
+
+        /* --- CRONÓMETRO DE DESCANSO --- */
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            timeLeft = seconds;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert('¡Tiempo de descanso terminado! A por la siguiente serie 🔥');
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 0;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer-display').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        /* --- HISTORIAL --- */
+        function toggleHistoryView() {
+            historyCard.classList.toggle('hidden');
+            document.getElementById('main-view').classList.toggle('hidden');
+            
+            if (!historyCard.classList.contains('hidden')) {
+                renderHistory();
+            }
+        }
+
+        function renderHistory() {
+            if (historyLog.length === 0) {
+                historyList.innerHTML = `<div class="empty-state">No hay entrenamientos registrados todavía.</div>`;
+                return;
+            }
+
+            historyList.innerHTML = historyLog.map(session => `
+                <div style="background: #0f172a; padding: 14px; border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; color: var(--primary);">
+                        <span>${session.routineName}</span>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">${session.date}</span>
+                    </div>
+                    <ul style="list-style: none; font-size: 0.9rem; color: var(--text-muted);">
+                        ${session.exercises.map(ex => `<li>• ${ex.name}: <strong>${ex.loggedWeight}</strong> (Meta:${ex.reps})</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
         }
 
         function editRoutine(id) {
@@ -374,13 +511,4 @@
             if (routine) openForm(routine);
         }
 
-        function deleteRoutine(id) {
-            if (confirm('¿Estás seguro de eliminar esta rutina?')) {
-                routines = routines.filter(r => r.id !== id);
-                localStorage.setItem('gym_routines', JSON.stringify(routines));
-                renderRoutines();
-            }
-        }
-    </script>
-</body>
-</html>
+        function deleteRoutine(
