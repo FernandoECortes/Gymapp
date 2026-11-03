@@ -30,42 +30,51 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding-bottom: 90px; /* Espacio para el timer flotante */
+            padding-bottom: 110px; /* Espacio para el timer flotante */
         }
 
         .container {
             width: 100%;
-            max-width: 750px;
+            max-width: 650px;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             border-bottom: 2px solid var(--border);
             padding-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--primary);
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 8px;
         }
 
         .btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 10px 16px;
+            padding: 10px 14px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 0.9rem;
             transition: background 0.2s;
+            touch-action: manipulation;
         }
         .btn:hover { background-color: var(--primary-hover); }
 
@@ -84,13 +93,13 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px;
             margin-bottom: 20px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.9rem; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.85rem; }
         input, select {
             width: 100%;
             padding: 10px;
@@ -102,29 +111,48 @@
         }
         input:focus, select:focus { outline: none; border-color: var(--primary); }
 
+        /* Fila del formulario de ejercicios optimizada para mobile */
         .form-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr auto;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 10px;
+            background: #0b0f19;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        /* Rutinas y Ejercicios */
+        .form-row-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        /* Rutinas y Tarjetas */
         .routine-item {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 18px;
+            padding: 15px;
             margin-bottom: 15px;
         }
         .routine-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        .routine-title { font-size: 1.2rem; font-weight: bold; }
+        .routine-title { font-size: 1.1rem; font-weight: bold; }
+        
+        .routine-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
         .exercise-list { list-style: none; border-top: 1px solid var(--border); padding-top: 10px; }
         .exercise-row {
             display: flex;
@@ -132,18 +160,19 @@
             align-items: center;
             padding: 8px 0;
             border-bottom: 1px dashed var(--border);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            gap: 10px;
         }
         .badge {
             background-color: #334155;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
-            margin-left: 8px;
+            margin-left: 4px;
         }
 
-        /* Panel de Cronómetro Flotante */
+        /* Panel de Cronómetro Flotante Mobile Friendly */
         .timer-bar {
             position: fixed;
             bottom: 0;
@@ -151,22 +180,25 @@
             width: 100%;
             background-color: #0f172a;
             border-top: 2px solid var(--border);
-            padding: 12px 20px;
+            padding: 10px 15px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.4);
             z-index: 1000;
+            flex-wrap: wrap;
+            gap: 6px;
         }
-        .timer-display { font-size: 1.3rem; font-weight: bold; font-family: monospace; color: var(--accent); }
+        .timer-info { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+        .timer-display { font-size: 1.2rem; font-weight: bold; font-family: monospace; color: var(--accent); }
+        .timer-buttons { display: flex; gap: 4px; }
 
         /* Modo entrenamiento activo */
         .active-workout-card { border: 2px solid var(--accent); }
         .set-checkbox { width: 22px; height: 22px; accent-color: var(--accent); cursor: pointer; }
 
         .hidden { display: none !important; }
-        .empty-state { text-align: center; color: var(--text-muted); padding: 40px 0; }
+        .empty-state { text-align: center; color: var(--text-muted); padding: 30px 0; font-size: 0.95rem; }
     </style>
 </head>
 <body>
@@ -174,40 +206,40 @@
     <div class="container">
         <header>
             <h1>💪 Gym Routine Pro</h1>
-            <div>
+            <div class="header-buttons">
                 <button class="btn btn-warning btn-sm" id="history-view-btn" onclick="toggleHistoryView()">Historial</button>
-                <button class="btn" id="toggle-form-btn">+ Nueva Rutina</button>
+                <button class="btn btn-sm" id="toggle-form-btn">+ Nueva Rutina</button>
             </div>
         </header>
 
         <!-- Formulario para crear/editar rutina -->
         <div class="card hidden" id="routine-form-card">
-            <h3 id="form-title" style="margin-bottom: 15px;">Crear Nueva Rutina</h3>
+            <h3 id="form-title" style="margin-bottom: 12px; font-size: 1.1rem;">Crear Nueva Rutina</h3>
             <form id="routine-form">
                 <input type="hidden" id="routine-id">
                 <div class="form-group">
-                    <label for="routine-name">Nombre de la Rutina (Ej: Día A - Tren Superior)</label>
+                    <label for="routine-name">Nombre de la Rutina</label>
                     <input type="text" id="routine-name" required placeholder="Ej: Espalda / Bíceps">
                 </div>
 
-                <div id="exercises-container">
-                    <label>Ejercicios</label>
+                <div id="exercises-container" style="margin-bottom: 10px;">
+                    <label style="margin-bottom: 8px;">Ejercicios</label>
                 </div>
 
-                <button type="button" class="btn btn-sm btn-success" id="add-exercise-btn" style="margin-bottom: 15px;">+ Agregar Ejercicio</button>
+                <button type="button" class="btn btn-sm btn-success" id="add-exercise-btn" style="margin-bottom: 15px; width: 100%;">+ Agregar Ejercicio</button>
 
-                <div style="display: flex; gap: 10px;">
-                    <button type="submit" class="btn">Guardar Rutina</button>
-                    <button type="button" class="btn btn-danger" id="cancel-form-btn">Cancelar</button>
+                <div style="display: flex; gap: 8px;">
+                    <button type="submit" class="btn" style="flex: 1;">Guardar</button>
+                    <button type="button" class="btn btn-danger" id="cancel-form-btn" style="flex: 1;">Cancelar</button>
                 </div>
             </form>
         </div>
 
         <!-- Vista de Historial -->
         <div class="card hidden" id="history-card">
-            <h3 style="margin-bottom: 15px;">📈 Historial de Entrenamientos</h3>
+            <h3 style="margin-bottom: 12px; font-size: 1.1rem;">📈 Historial</h3>
             <div id="history-list"></div>
-            <button class="btn btn-sm btn-danger" onclick="toggleHistoryView()" style="margin-top: 15px;">Cerrar Historial</button>
+            <button class="btn btn-sm btn-danger" onclick="toggleHistoryView()" style="margin-top: 12px; width: 100%;">Cerrar Historial</button>
         </div>
 
         <!-- Listado de Rutinas / Modo Activo -->
@@ -218,19 +250,23 @@
 
     <!-- Barra de Cronómetro Global -->
     <div class="timer-bar">
-        <span>⏱️ Descanso:</span>
-        <span class="timer-display" id="timer-display">00:00</span>
-        <button class="btn btn-sm" onclick="startTimer(60)">60s</button>
-        <button class="btn btn-sm" onclick="startTimer(90)">90s</button>
-        <button class="btn btn-sm" onclick="startTimer(120)">120s</button>
-        <button class="btn btn-danger btn-sm" onclick="stopTimer()">Parar</button>
+        <div class="timer-info">
+            <span>⏱️ Descanso:</span>
+            <span class="timer-display" id="timer-display">00:00</span>
+        </div>
+        <div class="timer-buttons">
+            <button class="btn btn-sm" onclick="startTimer(60)">60s</button>
+            <button class="btn btn-sm" onclick="startTimer(90)">90s</button>
+            <button class="btn btn-sm" onclick="startTimer(120)">120s</button>
+            <button class="btn btn-danger btn-sm" onclick="stopTimer()">X</button>
+        </div>
     </div>
 
     <script>
         let routines = JSON.parse(localStorage.getItem('gym_routines')) || [];
         let historyLog = JSON.parse(localStorage.getItem('gym_history')) || [];
         
-        let activeWorkout = null; // Guardará los datos de la sesión en curso
+        let activeWorkout = null;
         let timerInterval = null;
         let timeLeft = 0;
 
@@ -257,7 +293,7 @@
         function openForm(routine = null) {
             routineFormCard.classList.remove('hidden');
             toggleFormBtn.classList.add('hidden');
-            exercisesContainer.innerHTML = '';
+            exercisesContainer.innerHTML = '<label style="margin-bottom: 8px;">Ejercicios</label>';
 
             if (routine) {
                 formTitle.textContent = 'Editar Rutina';
@@ -282,18 +318,22 @@
             const row = document.createElement('div');
             row.classList.add('form-row');
             row.innerHTML = `
-                <input type="text" placeholder="Ejercicio (Ej: Press Banca)" class="ex-name" value="${data.name}" required>
-                <input type="text" placeholder="Series/Reps (Ej: 4x10)" class="ex-reps" value="${data.reps}" required>
-                <input type="text" placeholder="Peso (Ej: 60 kg)" class="ex-weight" value="${data.weight}" required>
-                <select class="ex-muscle">
-                    <option value="Pecho" ${data.muscle==='Pecho'?'selected':''}>Pecho</option>
-                    <option value="Espalda" ${data.muscle==='Espalda'?'selected':''}>Espalda</option>
-                    <option value="Piernas" ${data.muscle==='Piernas'?'selected':''}>Piernas</option>
-                    <option value="Hombros" ${data.muscle==='Hombros'?'selected':''}>Hombros</option>
-                    <option value="Brazos" ${data.muscle==='Brazos'?'selected':''}>Brazos</option>
-                    <option value="Core" ${data.muscle==='Core'?'selected':''}>Core</option>
-                </select>
-                <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">X</button>
+                <input type="text" placeholder="Nombre (Ej: Press Banca)" class="ex-name" value="${data.name}" required>
+                <div class="form-row-grid">
+                    <input type="text" placeholder="Reps (Ej: 4x10)" class="ex-reps" value="${data.reps}" required>
+                    <input type="text" placeholder="Peso (Ej: 60kg)" class="ex-weight" value="${data.weight}" required>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <select class="ex-muscle" style="flex: 1;">
+                        <option value="Pecho" ${data.muscle==='Pecho'?'selected':''}>Pecho</option>
+                        <option value="Espalda" ${data.muscle==='Espalda'?'selected':''}>Espalda</option>
+                        <option value="Piernas" ${data.muscle==='Piernas'?'selected':''}>Piernas</option>
+                        <option value="Hombros" ${data.muscle==='Hombros'?'selected':''}>Hombros</option>
+                        <option value="Brazos" ${data.muscle==='Brazos'?'selected':''}>Brazos</option>
+                        <option value="Core" ${data.muscle==='Core'?'selected':''}>Core</option>
+                    </select>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()">Eliminar</button>
+                </div>
             `;
             exercisesContainer.appendChild(row);
         }
@@ -331,7 +371,7 @@
         }
 
         function renderRoutines() {
-            if (activeWorkout) return; // Si estamos entrenando, no redibujar la lista estática
+            if (activeWorkout) return;
 
             if (routines.length === 0) {
                 routinesList.innerHTML = `<div class="empty-state">No tenés rutinas guardadas todavía. ¡Crea una para empezar!</div>`;
@@ -348,7 +388,7 @@
                     exercisesHTML += `
                         <li class="exercise-row">
                             <span><strong>${ex.name}</strong> <span class="badge">${ex.muscle}</span></span>
-                            <span style="color: var(--text-muted);">Meta: <strong>${ex.reps}</strong> | Último: <strong>${ex.weight}</strong></span>
+                            <span style="color: var(--text-muted); text-align: right; font-size: 0.85rem;">Meta: <strong>${ex.reps}</strong><br>Peso: <strong>${ex.weight}</strong></span>
                         </li>
                     `;
                 });
@@ -356,10 +396,10 @@
                 item.innerHTML = `
                     <div class="routine-header">
                         <span class="routine-title">${routine.name}</span>
-                        <div style="display: flex; gap: 8px;">
+                        <div class="routine-actions">
                             <button class="btn btn-success btn-sm" onclick="startWorkout(${routine.id})">▶️ Entrenar</button>
                             <button class="btn btn-sm" onclick="editRoutine(${routine.id})">Editar</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteRoutine(${routine.id})">Eliminar</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteRoutine(${routine.id})">X</button>
                         </div>
                     </div>
                     <ul class="exercise-list">${exercisesHTML}</ul>
@@ -368,7 +408,6 @@
             });
         }
 
-        /* --- MODO ENTRENAMIENTO EN VIVO --- */
         function startWorkout(id) {
             const routine = routines.find(r => r.id === id);
             if (!routine) return;
@@ -386,34 +425,33 @@
             toggleFormBtn.classList.add('hidden');
             routinesList.innerHTML = `
                 <div class="card active-workout-card">
-                    <h2 style="color: var(--accent); margin-bottom: 5px;">🔥 Entrenando: ${activeWorkout.routineName}</h2>
-                    <p style="color: var(--text-muted); margin-bottom: 20px;">Marcá tus series completadas y ajustá el peso real utilizado hoy.</p>
+                    <h2 style="color: var(--accent); margin-bottom: 6px; font-size: 1.2rem;">🔥 ${activeWorkout.routineName}</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.85rem;">Registrá tus series y ajustá el peso real.</p>
                     
                     ${activeWorkout.exercises.map((ex, idx) => `
-                        <div style="background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--border);">
-                            <div style="font-weight: bold; margin-bottom: 6px;">${ex.name} <span class="badge">${ex.muscle}</span></div>
-                            <div style="display: flex; gap: 10px; align-items: center; font-size: 0.9rem; color: var(--text-muted);">
-                                <span>Meta: ${ex.reps}</span>
-                                <div style="flex-grow: 1;">
-                                    <input type="text" value="${ex.loggedWeight}" id="weight-${idx}" style="padding: 6px; font-size: 0.9rem;" placeholder="Peso real hoy">
+                        <div style="background: #0b0f19; padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border);">
+                            <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.95rem;">${ex.name} <span class="badge">${ex.muscle}</span></div>
+                            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                <span style="font-size: 0.85rem; color: var(--text-muted); width: 100%;">Meta: ${ex.reps}</span>
+                                <div style="flex: 1; min-width: 120px;">
+                                    <input type="text" value="${ex.loggedWeight}" id="weight-${idx}" style="padding: 8px; font-size: 0.9rem;" placeholder="Peso hoy">
                                 </div>
-                                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text-color);">
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-color); font-size: 0.9rem;">
                                     <input type="checkbox" class="set-checkbox"> Hecho
                                 </label>
                             </div>
                         </div>
                     `).join('')}
 
-                    <div style="display: flex; gap: 10px; margin-top: 20px;">
-                        <button class="btn btn-success" onclick="finishWorkout()">🏁 Finalizar y Guardar Sesión</button>
-                        <button class="btn btn-danger" onclick="cancelWorkout()">Cancelar</button>
+                    <div style="display: flex; gap: 8px; margin-top: 15px;">
+                        <button class="btn btn-success" onclick="finishWorkout()" style="flex: 1;">Finalizar</button>
+                        <button class="btn btn-danger" onclick="cancelWorkout()" style="flex: 1;">Cancelar</button>
                     </div>
                 </div>
             `;
         }
 
         function finishWorkout() {
-            // Actualizar pesos reales en la rutina base si el usuario los cambió
             activeWorkout.exercises.forEach((ex, idx) => {
                 const newWeightInput = document.getElementById(`weight-${idx}`);
                 if (newWeightInput) {
@@ -421,11 +459,9 @@
                 }
             });
 
-            // Guardar en historial
             historyLog.unshift(activeWorkout);
             localStorage.setItem('gym_history', JSON.stringify(historyLog));
 
-            // Actualizar pesos en la rutina principal
             const routine = routines.find(r => r.name === activeWorkout.routineName);
             if (routine) {
                 routine.exercises.forEach((ex, idx) => {
@@ -448,7 +484,6 @@
             }
         }
 
-        /* --- CRONÓMETRO DE DESCANSO --- */
         function startTimer(seconds) {
             clearInterval(timerInterval);
             timeLeft = seconds;
@@ -459,7 +494,7 @@
                 updateTimerDisplay();
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert('¡Tiempo de descanso terminado! A por la siguiente serie 🔥');
+                    alert('¡Tiempo de descanso terminado! 🔥');
                 }
             }, 1000);
         }
@@ -477,7 +512,6 @@
                 `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        /* --- HISTORIAL --- */
         function toggleHistoryView() {
             historyCard.classList.toggle('hidden');
             document.getElementById('main-view').classList.toggle('hidden');
@@ -494,13 +528,13 @@
             }
 
             historyList.innerHTML = historyLog.map(session => `
-                <div style="background: #0f172a; padding: 14px; border-radius: 8px; margin-bottom: 12px; border: 1px solid var(--border);">
-                    <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; color: var(--primary);">
+                <div style="background: #0b0f19; padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 6px; color: var(--primary); font-size: 0.95rem; flex-wrap: wrap;">
                         <span>${session.routineName}</span>
-                        <span style="font-size: 0.85rem; color: var(--text-muted);">${session.date}</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">${session.date}</span>
                     </div>
-                    <ul style="list-style: none; font-size: 0.9rem; color: var(--text-muted);">
-                        ${session.exercises.map(ex => `<li>• ${ex.name}: <strong>${ex.loggedWeight}</strong> (Meta:${ex.reps})</li>`).join('')}
+                    <ul style="list-style: none; font-size: 0.85rem; color: var(--text-muted);">
+                        ${session.exercises.map(ex => `<li>• ${ex.name}: <strong>${ex.loggedWeight}</strong> (Meta: ${ex.reps})</li>`).join('')}
                     </ul>
                 </div>
             `).join('');
@@ -511,4 +545,13 @@
             if (routine) openForm(routine);
         }
 
-        function deleteRoutine(
+        function deleteRoutine(id) {
+            if (confirm('¿Estás seguro de eliminar esta rutina?')) {
+                routines = routines.filter(r => r.id !== id);
+                localStorage.setItem('gym_routines', JSON.stringify(routines));
+                renderRoutines();
+            }
+        }
+    </script>
+</body>
+</html>
